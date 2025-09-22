@@ -1,0 +1,828 @@
+{
+  "info": {
+    "name": "Sistema de Inventario Multi-Bodega",
+    "description": "API completa para gestión de inventario con método get_related genérico",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "samsung_brand_id",
+      "value": "",
+      "type": "string",
+      "description": "ID de la marca Samsung (se actualiza automáticamente)"
+    },
+    {
+      "key": "test_product_id",
+      "value": "",
+      "type": "string",
+      "description": "ID de producto de prueba"
+    },
+    {
+      "key": "test_customer_id",
+      "value": "",
+      "type": "string",
+      "description": "ID de cliente de prueba"
+    },
+    {
+      "key": "test_order_id",
+      "value": "",
+      "type": "string",
+      "description": "ID de orden de prueba"
+    }
+  ],
+  "item": [
+    {
+      "name": "🏷️ CRUD - Brands",
+      "item": [
+        {
+          "name": "List Brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/brands/",
+              "host": ["{{base_url}}"],
+              "path": ["brands", ""]
+            },
+            "description": "Obtiene lista de todas las marcas"
+          }
+        },
+        {
+          "name": "Create Brand",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nueva Marca\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/brands/",
+              "host": ["{{base_url}}"],
+              "path": ["brands", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Brand Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/brands/{{samsung_brand_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["brands", "{{samsung_brand_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Brand",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Samsung Electronics\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/brands/{{samsung_brand_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["brands", "{{samsung_brand_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Brand Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/brands/{{samsung_brand_id}}/products/",
+              "host": ["{{base_url}}"],
+              "path": ["brands", "{{samsung_brand_id}}", "products", ""]
+            },
+            "description": "Obtiene todos los productos de una marca específica"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 CRUD - Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/",
+              "host": ["{{base_url}}"],
+              "path": ["products", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('test_product_id', responseJson.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Product API\",\n  \"sku\": \"TEST-API-001\",\n  \"price\": \"299.99\",\n  \"brand\": \"{{samsung_brand_id}}\",\n  \"category\": \"category-id-here\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/products/",
+              "host": ["{{base_url}}"],
+              "path": ["products", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Product Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{test_product_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{test_product_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Product API Updated\",\n  \"sku\": \"TEST-API-001\",\n  \"price\": \"349.99\",\n  \"brand\": \"{{samsung_brand_id}}\",\n  \"category\": \"category-id-here\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/products/{{test_product_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{test_product_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{test_product_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{test_product_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Products Low Stock",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/low_stock/?threshold=50",
+              "host": ["{{base_url}}"],
+              "path": ["products", "low_stock", ""],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Productos con stock menor al umbral especificado"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔗 GET_RELATED - JOINs Parametrizables",
+      "item": [
+        {
+          "name": "1. Basic Join - Products with Brand and Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/get_related/?join=brand,category",
+              "host": ["{{base_url}}"],
+              "path": ["products", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "brand,category",
+                  "description": "Incluir relaciones de marca y categoría"
+                }
+              ]
+            },
+            "description": "Ejemplo básico: productos con información de marca y categoría"
+          }
+        },
+        {
+          "name": "2. Filtered Join - Samsung Products Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/get_related/?join=brand,category&filter[brand]=name__icontains=Samsung&ordering=name",
+              "host": ["{{base_url}}"],
+              "path": ["products", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "brand,category"
+                },
+                {
+                  "key": "filter[brand]",
+                  "value": "name__icontains=Samsung",
+                  "description": "Filtrar solo productos Samsung"
+                },
+                {
+                  "key": "ordering",
+                  "value": "name",
+                  "description": "Ordenar por nombre"
+                }
+              ]
+            },
+            "description": "Filtro: solo productos de marca Samsung ordenados por nombre"
+          }
+        },
+        {
+          "name": "3. Custom Fields - Specific Fields Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/get_related/?join=brand,category&fields[product]=name,sku,price&fields[brand]=name&fields[category]=name&limit=5",
+              "host": ["{{base_url}}"],
+              "path": ["products", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "brand,category"
+                },
+                {
+                  "key": "fields[product]",
+                  "value": "name,sku,price",
+                  "description": "Solo campos específicos del producto"
+                },
+                {
+                  "key": "fields[brand]",
+                  "value": "name",
+                  "description": "Solo nombre de la marca"
+                },
+                {
+                  "key": "fields[category]",
+                  "value": "name",
+                  "description": "Solo nombre de la categoría"
+                },
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "description": "Limitar a 5 resultados"
+                }
+              ]
+            },
+            "description": "Campos específicos: solo nombre, SKU, precio y nombres de relaciones"
+          }
+        },
+        {
+          "name": "4. Complex Join - Products in Customer Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/get_related/?join=brand,order_items__order__customer&filter[brand]=name__icontains=Samsung&filter[customer]=email=john@example.com&distinct=true",
+              "host": ["{{base_url}}"],
+              "path": ["products", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "brand,order_items__order__customer",
+                  "description": "JOIN complejo a través de múltiples relaciones"
+                },
+                {
+                  "key": "filter[brand]",
+                  "value": "name__icontains=Samsung"
+                },
+                {
+                  "key": "filter[customer]",
+                  "value": "email=john@example.com",
+                  "description": "Productos Samsung en órdenes de John"
+                },
+                {
+                  "key": "distinct",
+                  "value": "true",
+                  "description": "Eliminar duplicados"
+                }
+              ]
+            },
+            "description": "Caso de uso: Productos Samsung en órdenes del cliente john@example.com"
+          }
+        },
+        {
+          "name": "5. Stock Analysis - Complete Stock Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/stocks/get_related/?join=product__brand,product__category,warehouse&fields[stock]=qty,reserved&fields[product]=name,sku&fields[warehouse]=name,city&fields[brand]=name&ordering=warehouse__name,-qty",
+              "host": ["{{base_url}}"],
+              "path": ["stocks", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "product__brand,product__category,warehouse",
+                  "description": "Información completa de stock"
+                },
+                {
+                  "key": "fields[stock]",
+                  "value": "qty,reserved"
+                },
+                {
+                  "key": "fields[product]",
+                  "value": "name,sku"
+                },
+                {
+                  "key": "fields[warehouse]",
+                  "value": "name,city"
+                },
+                {
+                  "key": "fields[brand]",
+                  "value": "name"
+                },
+                {
+                  "key": "ordering",
+                  "value": "warehouse__name,-qty",
+                  "description": "Ordenar por bodega y cantidad descendente"
+                }
+              ]
+            },
+            "description": "Análisis completo de stock con información de producto, marca y bodega"
+          }
+        },
+        {
+          "name": "6. Customer Orders Analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/get_related/?join=orders__items__product__brand&filter[customer]=email=john@example.com&fields[customer]=full_name,email&fields[orders]=status,created_at&fields[product]=name,sku",
+              "host": ["{{base_url}}"],
+              "path": ["customers", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "orders__items__product__brand"
+                },
+                {
+                  "key": "filter[customer]",
+                  "value": "email=john@example.com"
+                },
+                {
+                  "key": "fields[customer]",
+                  "value": "full_name,email"
+                },
+                {
+                  "key": "fields[orders]",
+                  "value": "status,created_at"
+                },
+                {
+                  "key": "fields[product]",
+                  "value": "name,sku"
+                }
+              ]
+            },
+            "description": "Análisis de órdenes de un cliente específico"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛒 Orders & Business Logic",
+      "item": [
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/",
+              "host": ["{{base_url}}"],
+              "path": ["orders", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Order with Items",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('test_order_id', responseJson.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer\": \"{{test_customer_id}}\",\n  \"items\": [\n    {\n      \"product\": \"{{test_product_id}}\",\n      \"qty\": 2,\n      \"unit_price\": \"299.99\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/",
+              "host": ["{{base_url}}"],
+              "path": ["orders", ""]
+            },
+            "description": "Crear orden con items (usando OrderCreateSerializer)"
+          }
+        },
+        {
+          "name": "Confirm Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{test_order_id}}/confirm/",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{test_order_id}}", "confirm", ""]
+            },
+            "description": "Confirmar orden y reservar stock automáticamente"
+          }
+        },
+        {
+          "name": "Customer Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/{{test_customer_id}}/orders/",
+              "host": ["{{base_url}}"],
+              "path": ["customers", "{{test_customer_id}}", "orders", ""]
+            },
+            "description": "Obtener todas las órdenes de un cliente"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Payments",
+      "item": [
+        {
+          "name": "List Payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payments/",
+              "host": ["{{base_url}}"],
+              "path": ["payments", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": \"{{test_order_id}}\",\n  \"method\": \"CARD\",\n  \"amount\": \"599.98\",\n  \"status\": \"PENDING\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/",
+              "host": ["{{base_url}}"],
+              "path": ["payments", ""]
+            }
+          }
+        },
+        {
+          "name": "Confirm Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/payment-id-here/confirm/",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "payment-id-here", "confirm", ""]
+            },
+            "description": "Confirmar un pago pendiente"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Stock & Warehouse",
+      "item": [
+        {
+          "name": "List Stock",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/stocks/",
+              "host": ["{{base_url}}"],
+              "path": ["stocks", ""]
+            }
+          }
+        },
+        {
+          "name": "Available Stock Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/stocks/available/",
+              "host": ["{{base_url}}"],
+              "path": ["stocks", "available", ""]
+            },
+            "description": "Solo stock disponible (no reservado)"
+          }
+        },
+        {
+          "name": "Warehouse Stock",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/warehouses/warehouse-id-here/stock/",
+              "host": ["{{base_url}}"],
+              "path": ["warehouses", "warehouse-id-here", "stock", ""]
+            },
+            "description": "Todo el stock de una bodega específica"
+          }
+        },
+        {
+          "name": "Product Stock in All Warehouses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{test_product_id}}/stock/",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{test_product_id}}", "stock", ""]
+            },
+            "description": "Stock de un producto en todas las bodegas"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🧪 Testing & Examples",
+      "item": [
+        {
+          "name": "Setup - Get Samsung Brand ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const responseJson = pm.response.json();",
+                  "const samsungBrand = responseJson.results.find(brand => brand.name.includes('Samsung'));",
+                  "if (samsungBrand) {",
+                  "    pm.collectionVariables.set('samsung_brand_id', samsungBrand.id);",
+                  "    console.log('Samsung Brand ID:', samsungBrand.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/brands/?search=Samsung",
+              "host": ["{{base_url}}"],
+              "path": ["brands", ""],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Samsung"
+                }
+              ]
+            },
+            "description": "Obtener ID de Samsung para usar en otras requests"
+          }
+        },
+        {
+          "name": "Setup - Get Test Customer ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const responseJson = pm.response.json();",
+                  "const johnCustomer = responseJson.results.find(customer => customer.email === 'john@example.com');",
+                  "if (johnCustomer) {",
+                  "    pm.collectionVariables.set('test_customer_id', johnCustomer.id);",
+                  "    console.log('John Customer ID:', johnCustomer.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/",
+              "host": ["{{base_url}}"],
+              "path": ["customers", ""]
+            },
+            "description": "Obtener ID del cliente John para testing"
+          }
+        },
+        {
+          "name": "Test Case: Brand + Customer Query",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/get_related/?join=brand,order_items__order__customer&filter[brand]=name__icontains=Samsung&filter[customer]=email=john@example.com&distinct=true&fields[product]=name,sku&fields[brand]=name&fields[customer]=full_name,email",
+              "host": ["{{base_url}}"],
+              "path": ["products", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "brand,order_items__order__customer"
+                },
+                {
+                  "key": "filter[brand]",
+                  "value": "name__icontains=Samsung"
+                },
+                {
+                  "key": "filter[customer]",
+                  "value": "email=john@example.com"
+                },
+                {
+                  "key": "distinct",
+                  "value": "true"
+                },
+                {
+                  "key": "fields[product]",
+                  "value": "name,sku"
+                },
+                {
+                  "key": "fields[brand]",
+                  "value": "name"
+                },
+                {
+                  "key": "fields[customer]",
+                  "value": "full_name,email"
+                }
+              ]
+            },
+            "description": "Caso de prueba: Productos Samsung en órdenes de John - equivalente a función SQL"
+          }
+        },
+        {
+          "name": "Test Case: High Quantity Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payments/get_related/?join=order__items__product,order__customer&filter[orderitem]=qty__gte=2&filter[payment]=status=CONFIRMED&fields[payment]=method,amount,status&fields[product]=name,sku&fields[customer]=full_name",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "get_related", ""],
+              "query": [
+                {
+                  "key": "join",
+                  "value": "order__items__product,order__customer"
+                },
+                {
+                  "key": "filter[orderitem]",
+                  "value": "qty__gte=2",
+                  "description": "Cantidad >= 2"
+                },
+                {
+                  "key": "filter[payment]",
+                  "value": "status=CONFIRMED"
+                },
+                {
+                  "key": "fields[payment]",
+                  "value": "method,amount,status"
+                },
+                {
+                  "key": "fields[product]",
+                  "value": "name,sku"
+                },
+                {
+                  "key": "fields[customer]",
+                  "value": "full_name"
+                }
+              ]
+            },
+            "description": "Caso de prueba: Pagos con productos de cantidad alta - equivalente a función SQL"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Script que se ejecuta antes de cada request",
+          "// Puede contener lógica común como autenticación"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Tests globales",
+          "pm.test(\"Status code should be successful\", function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+          "});",
+          "",
+          "pm.test(\"Response time is less than 2000ms\", function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});"
+        ]
+      }
+    }
+  ]
+} 
